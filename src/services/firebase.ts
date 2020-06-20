@@ -9,7 +9,7 @@ const firebaseConfig = {
   databaseURL: "https://handtalk-challenge.firebaseio.com",
   projectId: "handtalk-challenge",
   storageBucket: "handtalk-challenge.appspot.com",
-  appId: "1:881832597979:web:8c35a5a580f860db506ffe"
+  appId: "1:881832597979:web:8c35a5a580f860db506ffe",
 };
 
 firebase.initializeApp(firebaseConfig);
