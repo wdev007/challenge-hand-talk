@@ -58,11 +58,6 @@ const useStyles = makeStyles({
   },
 });
 
-interface IProps {
-  /** Indice para pegar a imagem do livro */
-  index: number;
-}
-
 const generateRandomColorAvatar = (colors: any[]): any => {
   const indexColor = Math.floor(Math.random() * (colors.length - 1));
   return colors[indexColor][500];
@@ -71,12 +66,7 @@ const generateRandomColorAvatar = (colors: any[]): any => {
 /**
  * Livro obtido do firestore
  */
-const Book: React.FC<IFirestoreBook & IProps> = ({
-  name,
-  price,
-  id,
-  index,
-}) => {
+const Book: React.FC<IFirestoreBook> = ({ name, price, id }) => {
   const classes = useStyles({
     colorAvatar: generateRandomColorAvatar(colors),
   });
@@ -86,8 +76,8 @@ const Book: React.FC<IFirestoreBook & IProps> = ({
 
   useEffect(() => {
     loadAuthorData();
-    getBookImage(index);
-  }, [index]);
+    getBookImage();
+  }, []);
 
   const loadAuthorData = async () => {
     try {
@@ -100,16 +90,19 @@ const Book: React.FC<IFirestoreBook & IProps> = ({
     }
   };
 
-  const getBookImage = async (index: number) => {
-    // Obtem imagem a partir do indice do livro no array
+  const getBookImage = async () => {
     try {
       setLoading(true);
       const { items } = await fbStorage.ref().child("books").listAll();
 
-      if (!items[index].getDownloadURL) return;
+      items.forEach(async (image) => {
+        const nameId = image.name.split(".")[0];
+        if (nameId === id) {
+          const urlImage = await image.getDownloadURL();
+          setUrlImage(urlImage);
+        }
+      });
 
-      const urlImage = await items[index].getDownloadURL();
-      setUrlImage(urlImage);
       setLoading(false);
     } catch (error) {
       setLoading(false);

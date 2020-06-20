@@ -37,14 +37,9 @@ const BookList: React.FC<{}> = () => {
     <Box p={2}>
       {loading && <LinearProgress />}
       <Grid container spacing={2}>
-        {books.map((book, index) => (
+        {books.map((book) => (
           <Grid sm={6} xs={6} md={2} lg={3} item key={book.id}>
-            <Book
-              name={book.name}
-              price={book.price}
-              id={book.id}
-              index={index}
-            />
+            <Book name={book.name} price={book.price} id={book.id} />
           </Grid>
         ))}
       </Grid>
